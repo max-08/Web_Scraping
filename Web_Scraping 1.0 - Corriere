@@ -3,7 +3,7 @@
 # Lo script effettua lo Scraping dal sito del corriere della sera ed estrae il titolo ed i link li salva
 # in un file di testo chiamata esito_scraping
 # inserire il percorso desiderato dove salvare l'esito
-# il mio percorso è relativo al sistema operativo Linux
+
 
 from bs4 import BeautifulSoup
 import requests
@@ -31,10 +31,15 @@ scrivifile = open('/home/max/Scrivania/esito_scraping/esito_scraping.txt', 'w')
 #estraiamo il titolo del sito
 titolo = zuppa.title
 scrivifile.write('\n WeB_SCRAPING_1.0- CORRIERE.IT  \n')
-scrivifile.write('\n titolo \n')
+scrivifile.write('\n La pagina web è stata aggiornata al giorno: \n')
 
+# estrai la data
 
+data = zuppa.find_all("span", {"class":"last-update"})
+for x in data:
 
+    scrivifile.write(x.get_text())
+    print(x.get_text())
 # estraiamo tutti i titoli che sarebbe il tag H4  del sito e li stampiamo
 
 h4 = zuppa.find_all("h4")
