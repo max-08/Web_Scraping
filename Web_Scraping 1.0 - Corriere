@@ -1,0 +1,57 @@
+# ----------------------------WEB_SCRAPING_1.0-------------------------------------------------------------
+
+# Lo script effettua lo Scraping dal sito del corriere della sera ed estrae il titolo ed i link li salva
+# in un file di testo chiamata esito_scraping
+# inserire il percorso desiderato dove salvare l'esito
+# il mio percorso è relativo al sistema operativo Linux
+
+from bs4 import BeautifulSoup
+import requests
+import contextlib
+import re
+import os
+
+# collegamento al sito
+req = requests.get("https://www.corriere.it")
+#stampiamo l'esito
+status = req.status_code
+if status == 200:
+    print("la connessione è ok")
+else:
+    print("la connessione non è andata a buon fine")
+
+#effettuiamo lo scraping utilizzando la libreria Beautiful Soup
+zuppa = BeautifulSoup(req.text, "html.parser")
+
+#scrivi su file di testo
+#se utilizzate sistemi windows cambiare il percorso in "C:\\esito_scraping.txt"
+
+scrivifile = open('/home/max/Scrivania/esito_scraping/esito_scraping.txt', 'w')
+
+#estraiamo il titolo del sito
+titolo = zuppa.title
+scrivifile.write('\n WeB_SCRAPING_1.0- CORRIERE.IT  \n')
+scrivifile.write('\n titolo \n')
+
+
+
+# estraiamo tutti i titoli che sarebbe il tag H4  del sito e li stampiamo
+
+h4 = zuppa.find_all("h4")
+
+#Estraggo solo i link del sito ed il testo connesso
+#e li inserisce su un file di testo
+#
+
+for x in h4:
+    all_vals = x.find_all("a", href=True)
+    for all_vals in all_vals:
+        link = all_vals["href"]
+        testo = all_vals.get_text()
+        scrivifile.write('\n ---------- \n')
+        scrivifile.write(" \n Questi e' il titolo dell'articolo \n" )
+        scrivifile.write(testo)
+        scrivifile.write("\n Questi sono i link del sito \n ")
+        scrivifile.write(link)
+        print(link,testo)
+scrivifile.close()
